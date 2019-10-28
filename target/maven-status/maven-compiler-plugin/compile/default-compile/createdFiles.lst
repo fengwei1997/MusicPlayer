@@ -1,0 +1,6 @@
+com\dao\UserDao.class
+com\controller\UserController.class
+com\model\User.class
+com\service\imp\UserServiceImp.class
+com\test\UserTest.class
+com\service\UserService.class
