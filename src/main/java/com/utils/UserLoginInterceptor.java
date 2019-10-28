@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.transform.Source;
 
-public class UserLoginInterceptor implements HandlerInterceptor {
+public class UserLoginInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
         //获取请求的RUi:去除http:localhost:8080这部分剩下的
         System.out.println("handpre处理函数");
