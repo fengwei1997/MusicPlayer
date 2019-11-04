@@ -9,25 +9,26 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.transform.Source;
 
-public class UserLoginInterceptor extends HandlerInterceptorAdapter {
+public class UserLoginInterceptor implements HandlerInterceptor {
+    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
         //获取请求的RUi:去除http:localhost:8080这部分剩下的
-        System.out.println("handpre处理函数");
+        System.out.println("handpre处理函数前");
         String requestUri=request.getRequestURI();
         //UTL:除了login.jsp是可以公开访问的，其他的URL都进行拦截控制
-        if(requestUri.indexOf("/login")>0) {
+        if(requestUri.indexOf("/login")<=0) {
+            HttpSession session=request.getSession();
+            User user= (User) session.getAttribute("loginUser");
+            if(user!=null){
+                return true;
+            }else {
+                request.getRequestDispatcher("/login.jsp").forward(request,response);
+                return false;
+            }
+        }else{
+            System.out.println("handpre处理函数后");
             return true;
         }
-        //获取session
-        HttpSession session=request.getSession();
-        User user= (User) session.getAttribute("loginUser");
-        //判断session中是否有用户数据，如果有，则返回true，继续向下执行
-        if(user!=null){
-            return true;
-        }
-        //不符合条件的给出提示信息，并转发到登录页面
-        request.setAttribute("msg","您还没有登录，请先登录!");
-        request.getRequestDispatcher("/login.jsp").forward(request,response);
-        return false;
+
     }
 }
